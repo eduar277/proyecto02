@@ -1,0 +1,77 @@
+PASOS PARA LA CREACION DEL PROYECTO.
+
+
+A. VERIFICACION DE LOS APLICATIVOS BASICOS
+
+1. Verifique que se encuentre instalado el programa node.js ejecuta el comando
+   $> node --version
+
+   Instalelo desde:
+   https://nodejs.org/en/download
+
+2. Verifique la instalacion del npm con el comando
+   $> npm --version
+
+3. Verifique el cliente angular instalado.
+   $> ng version
+
+   Instale con el comando:
+   $> npm install @angular/cli
+      Este instalara la ultima version
+
+B. CREAR EL PROYECTO Y EJECUTAR
+1. Crear el proyecto con el comando
+   $> ng new proyequipos
+
+    Creando la carpeta proyequipos
+
+2. Desde un editor (Visual code o Intelj) abra la carpeta.
+   Al estar en el editor abra la terminal incluida y ejecute el comando:
+
+   $> npm install
+
+    Para cargar las librerias del angular.
+
+3. Ejecute el proyecto desde la terminal con el comando:
+   $> ng serve --port 8892
+
+   Verifique en un navegador.
+
+C. ADICIONAR BOOTSTRAP
+
+a. Ejecute el comando
+   $>  npm install bootstrap bootstrap-icons
+
+b. Busque el archivo angular.json y en el apartado
+  "styles": [
+    "node_modules/bootstrap/scss/bootstrap.css",
+    "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+    "src/styles.scss"
+  ],
+
+  "scripts": [
+    "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+  ]
+
+c. Ahora instalar los componentes popper y jquery con el comando
+   $> npm install jquery@3.3.1 popper.js@1.14.3 --save
+
+
+  En la seccion  scripts adicione
+ "scripts": [
+     "node_modules/jquery/dist/jquery.js",
+     "node_modules/popper.js/dist/umd/popper.js",
+
+     "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+   ]
+
+
+d. Instale los componentes bootstrap
+   $> npm install ng-bootstrap
+
+
+   EL AUTOR: Vinni . 2024
+
+
+
+
