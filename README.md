@@ -1,1 +1,1 @@
-# proyecto02
+# proyecto aplicativo para publicar inmuebles
