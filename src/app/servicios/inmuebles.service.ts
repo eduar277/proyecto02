@@ -13,7 +13,7 @@ export class InmueblesService {
   constructor(private http: HttpClient) { }
 
   public createInmueble(inmueble: Inmueble): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/registrar`, inmueble);
+    return this.http.post<any>(`${this.apiUrl}/registro`, inmueble);
   }
 
   public getInmuebles(): Observable<Inmueble[]> {
