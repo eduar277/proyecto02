@@ -1,4 +1,4 @@
-package co.vinni.soapproyectobase.utilidades;
+package co.eduar.inmuebles2.utilidades;
 
 import java.io.*;
 

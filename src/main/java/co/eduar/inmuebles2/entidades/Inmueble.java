@@ -1,5 +1,4 @@
-package co.vinni.soapproyectobase.entidades;
-
+package co.eduar.inmuebles2.entidades;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

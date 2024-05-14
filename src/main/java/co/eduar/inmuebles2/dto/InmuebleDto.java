@@ -1,4 +1,4 @@
-package co.vinni.soapproyectobase.dto;
+package co.eduar.inmuebles2.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
