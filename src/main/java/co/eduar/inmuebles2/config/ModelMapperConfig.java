@@ -1,4 +1,4 @@
-package co.vinni.soapproyectobase.config;
+package co.eduar.inmuebles2.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

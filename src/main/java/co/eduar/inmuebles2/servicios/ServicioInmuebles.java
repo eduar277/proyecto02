@@ -1,36 +1,36 @@
-package co.vinni.soapproyectobase.servicios;
-
-import co.vinni.soapproyectobase.dto.InmuebleDto;
-import co.vinni.soapproyectobase.entidades.Inmueble;
-import co.vinni.soapproyectobase.repositorios.RepositorioInmueble;
+package co.eduar.inmuebles2.servicios;
+import co.eduar.inmuebles2.dto.InmuebleDto;
+import co.eduar.inmuebles2.entidades.Inmueble;
+import co.eduar.inmuebles2.repositorios.RepositorioInmueble;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class ServicioInmuebles implements Serializable {
+public class ServicioInmuebles {
 
+    private final RepositorioInmueble repositorioInmueble;
     private final ModelMapper modelMapper;
 
     @Autowired
-    private RepositorioInmueble repositorioInmueble;
-
-    @Autowired
-    public ServicioInmuebles(ModelMapper modelMapper) {
+    public ServicioInmuebles(RepositorioInmueble repositorioInmueble, ModelMapper modelMapper) {
+        this.repositorioInmueble = repositorioInmueble;
         this.modelMapper = modelMapper;
     }
 
     public InmuebleDto registrarInmueble(InmuebleDto inmuebleDto) {
-        Inmueble inmueble = repositorioInmueble.save(modelMapper.map(inmuebleDto, Inmueble.class));
-        return modelMapper.map(inmueble, InmuebleDto.class);
+        Inmueble inmueble = modelMapper.map(inmuebleDto, Inmueble.class);
+        Inmueble inmuebleGuardado = repositorioInmueble.save(inmueble);
+        return modelMapper.map(inmuebleGuardado, InmuebleDto.class);
     }
 
-    public List<InmuebleDto> listarInmuebles() {
-        TypeToken<List<InmuebleDto>> typeToken = new TypeToken<>() {};
-        return modelMapper.map(repositorioInmueble.findAll(), typeToken.getType());
+    public List<InmuebleDto> obtenerInmuebles() {
+        List<Inmueble> inmuebles = repositorioInmueble.findAll();
+        return inmuebles.stream()
+                .map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class))
+                .collect(Collectors.toList());
     }
 }

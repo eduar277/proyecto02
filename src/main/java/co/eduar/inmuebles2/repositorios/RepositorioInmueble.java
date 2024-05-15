@@ -1,6 +1,6 @@
-package co.vinni.soapproyectobase.repositorios;
+package co.eduar.inmuebles2.repositorios;
 
-import co.vinni.soapproyectobase.entidades.Inmueble;
+import co.eduar.inmuebles2.entidades.Inmueble;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

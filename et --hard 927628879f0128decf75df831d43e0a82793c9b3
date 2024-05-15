@@ -1,0 +1,11 @@
+[33mcommit 927628879f0128decf75df831d43e0a82793c9b3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mbackend-changes[m[33m, [m[1;31morigin/backend-changes[m[33m)[m
+Author: EDUAR RODRIGUEZ <edwardrodriguez0805@gmail.com>
+Date:   Tue May 14 15:29:07 2024 -0500
+
+    completada la deuda tecnica del primer sprint, configurados el servicio api
+
+[33mcommit 7924c2317b39a8067a3088031842b7f59768d0df[m
+Author: EDUAR RODRIGUEZ <edwardrodriguez0805@gmail.com>
+Date:   Tue Apr 23 16:36:38 2024 -0500
+
+    se crea el primet sprint con la configuracion de base de datos y serviicos
