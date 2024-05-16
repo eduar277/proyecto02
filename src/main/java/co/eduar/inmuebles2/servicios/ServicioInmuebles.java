@@ -1,4 +1,5 @@
 package co.eduar.inmuebles2.servicios;
+
 import co.eduar.inmuebles2.dto.InmuebleDto;
 import co.eduar.inmuebles2.entidades.Inmueble;
 import co.eduar.inmuebles2.repositorios.RepositorioInmueble;
@@ -23,6 +24,7 @@ public class ServicioInmuebles {
 
     public InmuebleDto registrarInmueble(InmuebleDto inmuebleDto) {
         Inmueble inmueble = modelMapper.map(inmuebleDto, Inmueble.class);
+        inmueble.setImagenesRutas(inmuebleDto.getImagenesRutas());
         Inmueble inmuebleGuardado = repositorioInmueble.save(inmueble);
         return modelMapper.map(inmuebleGuardado, InmuebleDto.class);
     }
@@ -30,7 +32,16 @@ public class ServicioInmuebles {
     public List<InmuebleDto> obtenerInmuebles() {
         List<Inmueble> inmuebles = repositorioInmueble.findAll();
         return inmuebles.stream()
-                .map(inmueble -> modelMapper.map(inmueble, InmuebleDto.class))
+                .map(inmueble -> {
+                    InmuebleDto dto = modelMapper.map(inmueble, InmuebleDto.class);
+                    dto.setImagenesRutas(inmueble.getImagenesRutas());
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 }
+
+
+
+
+

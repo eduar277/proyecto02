@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,4 +20,5 @@ public class InmuebleDto implements Serializable {
     private int numHabitaciones;
     private int numBanios;
     private double precioPorDia;
+    private List<String> imagenesRutas;
 }
