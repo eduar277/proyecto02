@@ -3,7 +3,7 @@ import { InmueblesService } from '../../servicios/inmuebles.service';
 import { Inmueble } from '../../vo/inmueble';
 import { MatDialog } from '@angular/material/dialog';
 import { ImagePreviewDialogComponent } from '../image-preview-dialog/image-preview-dialog.component';
-import { FormGroup, FormControl, Validators } from '@angular/forms'; // Importa FormGroup, FormControl y Validators
+import {FormGroup, FormControl, Validators, ɵTypedOrUntyped, ɵFormGroupValue} from '@angular/forms'; // Importa FormGroup, FormControl y Validators
 
 @Component({
   selector: 'app-inmuebles',
