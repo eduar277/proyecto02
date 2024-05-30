@@ -1,0 +1,8 @@
+<div mat-dialog-content>
+  <img [src]="images[currentImageIndex]" alt="Image preview" class="img-fluid">
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="previousImage()">Anterior</button>
+  <button mat-button (click)="nextImage()">Siguiente</button>
+  <button mat-button mat-dialog-close>Aceptar</button>
+</div>

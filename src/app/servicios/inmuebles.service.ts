@@ -1,24 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { Inmueble } from '../vo/inmueble';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InmueblesService {
-  private apiUrl = environment.apiUrl + '/api/inmuebles';
+  private apiUrl = 'http://localhost:8862/api/inmuebles';
 
   constructor(private http: HttpClient) { }
 
-  public createInmueble(inmueble: Inmueble): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/registrar`, inmueble);
+  getInmuebles(): Observable<Inmueble[]> {
+    return this.http.get<Inmueble[]>(this.apiUrl + '/all');
   }
 
-  public getInmuebles(): Observable<Inmueble[]> {
-    return this.http.get<Inmueble[]>(`${this.apiUrl}/listar`);
+  createInmueble(inmueble: Inmueble, imagenes: File[]): Observable<Inmueble> {
+    const formData: FormData = new FormData();
+    formData.append('inmueble', new Blob([JSON.stringify(inmueble)], {
+      type: "application/json"
+    }));
+    for (let i = 0; i < imagenes.length; i++) {
+      formData.append('imagenes', imagenes[i], imagenes[i].name);
+    }
+    return this.http.post<Inmueble>(this.apiUrl + '/registro', formData);
   }
 }
+
+
 
 

@@ -1,19 +1,13 @@
 export class Inmueble {
-  titulo: string;
-  direccion: string;
-  numHabitaciones: number;
-  numBanios: number;
-  precioPorDia: number;
-  descripcion: string;
-  id: number;
-
-  constructor(titulo: string, descripcion: string, direccion: string, numHabitaciones: number, numBanios: number, precioPorDia: number, id:number) {
-    this.titulo = titulo;
-    this.direccion = direccion;
-    this.numHabitaciones = numHabitaciones;
-    this.numBanios = numBanios;
-    this.precioPorDia = precioPorDia;
-    this.descripcion = descripcion;
-    this.id = id;
-  }
+  id?: number;
+  titulo: string = '';
+  descripcion: string = '';
+  direccion: string = '';
+  numHabitaciones: number = 0;
+  numBanios: number = 0;
+  precioPorDia: number = 0;
+  imagenesRutas?: string[] = [];
+  expanded?: boolean = false; // Añade la propiedad 'expanded'
 }
+
+

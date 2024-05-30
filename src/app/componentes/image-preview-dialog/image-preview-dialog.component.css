@@ -1,0 +1,14 @@
+.image-preview-dialog {
+  text-align: center;
+}
+
+.image-preview-dialog img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.image-preview-dialog button {
+  margin: 10px;
+}
