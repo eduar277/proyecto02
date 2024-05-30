@@ -3,7 +3,6 @@ import { InmueblesService } from '../../servicios/inmuebles.service';
 import { Inmueble } from '../../vo/inmueble';
 import { MatDialog } from '@angular/material/dialog';
 import { ImagePreviewDialogComponent } from '../image-preview-dialog/image-preview-dialog.component';
-import {FormGroup, FormControl, Validators, ɵTypedOrUntyped, ɵFormGroupValue} from '@angular/forms'; // Importa FormGroup, FormControl y Validators
 
 @Component({
   selector: 'app-inmuebles',
@@ -12,38 +11,11 @@ import {FormGroup, FormControl, Validators, ɵTypedOrUntyped, ɵFormGroupValue} 
 })
 export class InmueblesComponent implements OnInit {
   inmuebles: Inmueble[] = [];
-  newInmueble: ɵTypedOrUntyped<{
-    descripcion: FormControl<string | null>;
-    imagenesRutas: FormControl<any[] | null>;
-    numBanios: FormControl<number | null>;
-    direccion: FormControl<string | null>;
-    titulo: FormControl<string | null>;
-    precioPorDia: FormControl<number | null>;
-    numHabitaciones: FormControl<number | null>
-  }, ɵFormGroupValue<{
-    descripcion: FormControl<string | null>;
-    imagenesRutas: FormControl<any[] | null>;
-    numBanios: FormControl<number | null>;
-    direccion: FormControl<string | null>;
-    titulo: FormControl<string | null>;
-    precioPorDia: FormControl<number | null>;
-    numHabitaciones: FormControl<number | null>
-  }>, any> = new Inmueble();
+  newInmueble: Inmueble = new Inmueble();
   imagenes: File[] = [];
   imagePreviews: string[] = [];
   currentPreviewIndex = 0;
   currentImageIndex = 0;
-
-  // Define inmuebleForm como un nuevo FormGroup
-  inmuebleForm = new FormGroup({
-    titulo: new FormControl('', Validators.required),
-    descripcion: new FormControl('', Validators.required),
-    direccion: new FormControl('', Validators.required),
-    numHabitaciones: new FormControl(0, Validators.required),
-    numBanios: new FormControl(0, Validators.required),
-    precioPorDia: new FormControl(0, Validators.required),
-    imagenesRutas: new FormControl([]),
-  });
 
   constructor(private inmueblesService: InmueblesService, private dialog: MatDialog) { }
 
@@ -55,12 +27,11 @@ export class InmueblesComponent implements OnInit {
     this.inmueblesService.getInmuebles().subscribe(inmuebles => this.inmuebles = inmuebles);
   }
 
-  onSubmit(): void {
+  addInmueble(): void {
     if (this.imagenes.length < 4) {
       alert('Por favor, selecciona al menos 4 imágenes.');
       return;
     }
-    this.newInmueble = this.inmuebleForm.value;
     this.inmueblesService.createInmueble(this.newInmueble, this.imagenes).subscribe(inmueble => {
       this.inmuebles.push(inmueble);
       alert('Inmueble registrado exitosamente');
@@ -112,6 +83,7 @@ export class InmueblesComponent implements OnInit {
     this.currentPreviewIndex = (this.currentPreviewIndex - 1 + this.imagePreviews.length) % this.imagePreviews.length;
   }
 }
+
 
 
 
