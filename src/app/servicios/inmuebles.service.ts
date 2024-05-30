@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Inmueble } from '../vo/inmueble';
-import {FormControl, ɵFormGroupValue, ɵTypedOrUntyped} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
@@ -13,36 +12,48 @@ export class InmueblesService {
   constructor(private http: HttpClient) { }
 
   getInmuebles(): Observable<Inmueble[]> {
-    return this.http.get<Inmueble[]>(this.apiUrl + '/all');
+    return this.http.get<Inmueble[]>(`${this.apiUrl}/all`);
   }
 
-  createInmueble(inmueble: ɵTypedOrUntyped<{
-    descripcion: FormControl<string | null>;
-    imagenesRutas: FormControl<any[] | null>;
-    numBanios: FormControl<number | null>;
-    direccion: FormControl<string | null>;
-    titulo: FormControl<string | null>;
-    precioPorDia: FormControl<number | null>;
-    numHabitaciones: FormControl<number | null>
-  }, ɵFormGroupValue<{
-    descripcion: FormControl<string | null>;
-    imagenesRutas: FormControl<any[] | null>;
-    numBanios: FormControl<number | null>;
-    direccion: FormControl<string | null>;
-    titulo: FormControl<string | null>;
-    precioPorDia: FormControl<number | null>;
-    numHabitaciones: FormControl<number | null>
-  }>, any>, imagenes: File[]): Observable<Inmueble> {
+  createInmueble(inmueble: {
+    descripcion: string;
+    direccion: string;
+    titulo: string;
+    precioPorDia: number;
+    numHabitaciones: number;
+    numBanios: number;
+  }, imagenes: string[]): Observable<Inmueble> {
     const formData: FormData = new FormData();
     formData.append('inmueble', new Blob([JSON.stringify(inmueble)], {
-      type: "application/json"
+      type: 'application/json'
     }));
     for (let i = 0; i < imagenes.length; i++) {
-      formData.append('imagenes', imagenes[i], imagenes[i].name);
+      const file = this.dataURLtoFile(imagenes[i], `image${i}.png`);
+      formData.append('imagenes', file);
     }
-    return this.http.post<Inmueble>(this.apiUrl + '/registro', formData);
+    return this.http.post<Inmueble>(`${this.apiUrl}/registro`, formData);
+  }
+
+  private dataURLtoFile(dataurl: string, filename: string): File {
+    const [mimeInfo, base64Data] = dataurl.split(',');
+    const mimeMatch = mimeInfo.match(/:(.*?);/);
+    if (!mimeMatch) {
+      throw new Error('Invalid data URL format');
+    }
+    const mime = mimeMatch[1];
+    const bstr = atob(base64Data);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
   }
 }
+
+
+
+
 
 
 

@@ -71,10 +71,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "soapProybaseCliente:build:production"
+              "buildTarget": "soapProybaseCliente:build:production"
             },
             "development": {
-              "browserTarget": "soapProybaseCliente:build:development"
+              "buildTarget": "soapProybaseCliente:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +82,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "soapProybaseCliente:build"
+            "buildTarget": "soapProybaseCliente:build"
           }
         },
         "test": {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { InmueblesService } from '../../servicios/inmuebles.service';
 import { Inmueble } from '../../vo/inmueble';
@@ -9,6 +9,9 @@ import { Inmueble } from '../../vo/inmueble';
   styleUrls: ['./inmuebles.component.css']
 })
 export class InmueblesComponent implements OnInit {
+  @ViewChild('previewModal') previewModal!: TemplateRef<any>;
+  @ViewChild('detalleModal') detalleModal!: TemplateRef<any>;
+
   inmuebleForm: FormGroup;
   inmuebles: Inmueble[] = [];
   inmuebleSeleccionado: Inmueble | undefined;
@@ -36,7 +39,7 @@ export class InmueblesComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.inmuebleForm.valid) {
+    if (this.inmuebleForm.valid && this.previewAccepted) {
       const inmueble = this.inmuebleForm.value;
       this.inmueblesService.createInmueble(inmueble, this.imagePreviews).subscribe(() => {
         this.getInmuebles();
@@ -55,16 +58,13 @@ export class InmueblesComponent implements OnInit {
       reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
       reader.readAsDataURL(files[i]);
     }
+    this.openModal(this.previewModal);
   }
 
   seleccionarInmueble(inmueble: Inmueble): void {
     this.inmuebleSeleccionado = inmueble;
     this.currentImageIndex = 0;
-  }
-
-  verDetalle(inmueble: Inmueble): void {
-    this.seleccionarInmueble(inmueble);
-    // Aquí puedes abrir un modal o redirigir a una página de detalle
+    this.openModal(this.detalleModal);
   }
 
   previousImage(): void {
@@ -74,15 +74,21 @@ export class InmueblesComponent implements OnInit {
   }
 
   nextImage(): void {
-    if (this.inmuebleSeleccionado?.imagenesRutas && this.currentImageIndex < this.inmuebleSeleccionado.imagenesRutas.length - 1) {
+    if (this.inmuebleSeleccionado?.imagenesRutas && this.currentImageIndex < (this.inmuebleSeleccionado.imagenesRutas.length - 1)) {
       this.currentImageIndex++;
     }
   }
 
   acceptPreviews(): void {
     this.previewAccepted = true;
+    this.closeModal();
+  }
+
+  openModal(template: TemplateRef<any>): void {
+    // Implementa la lógica para abrir el modal
+  }
+
+  closeModal(): void {
+    // Implementa la lógica para cerrar el modal
   }
 }
-
-
-

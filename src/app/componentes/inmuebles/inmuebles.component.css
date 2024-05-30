@@ -31,3 +31,39 @@
   background-color: #0056b3;
   border-color: #0056b3;
 }
+
+.card {
+  margin-top: 20px;
+}
+
+.card-body {
+  padding: 10px;
+}
+
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.image-card {
+  flex: 1 1 calc(33.333% - 10px);
+  box-sizing: border-box;
+}
+
+.image-card img {
+  width: 100%;
+  height: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body img {
+  max-width: 100%;
+}
+
+

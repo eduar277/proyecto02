@@ -1,50 +1,100 @@
-<form [formGroup]="inmuebleForm" (ngSubmit)="onSubmit()" class="form-container">
-  <h2 class="form-title">Registro de Inmueble</h2>
-  <div class="form-group">
-    <label for="titulo">Título:</label>
-    <input type="text" class="form-control" formControlName="titulo" placeholder="Ingrese el título del inmueble">
-  </div>
+<div class="container">
+  <form [formGroup]="inmuebleForm" (ngSubmit)="onSubmit()" class="form-container">
+    <div class="form-group">
+      <label for="titulo">Título:</label>
+      <input id="titulo" type="text" formControlName="titulo" class="form-control">
+    </div>
 
-  <div class="form-group">
-    <label for="descripcion">Descripción:</label>
-    <textarea class="form-control" formControlName="descripcion" rows="4" placeholder="Ingrese una descripción del inmueble"></textarea>
-  </div>
+    <div class="form-group">
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" formControlName="descripcion" class="form-control"></textarea>
+    </div>
 
-  <div class="form-row">
-    <div class="form-group col-md-6">
+    <div class="form-group">
       <label for="direccion">Dirección:</label>
-      <input type="text" class="form-control" formControlName="direccion" placeholder="Ingrese la dirección del inmueble">
+      <input id="direccion" type="text" formControlName="direccion" class="form-control">
     </div>
 
-    <div class="form-group col-md-3">
+    <div class="form-group">
       <label for="numHabitaciones">Número de habitaciones:</label>
-      <input type="number" class="form-control" formControlName="numHabitaciones" placeholder="Ej. 3">
+      <input id="numHabitaciones" type="number" formControlName="numHabitaciones" class="form-control">
     </div>
 
-    <div class="form-group col-md-3">
+    <div class="form-group">
       <label for="numBanios">Número de baños:</label>
-      <input type="number" class="form-control" formControlName="numBanios" placeholder="Ej. 2">
+      <input id="numBanios" type="number" formControlName="numBanios" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="precioPorDia">Precio por día:</label>
+      <input id="precioPorDia" type="number" formControlName="precioPorDia" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="imagenes">Imágenes:</label>
+      <input id="imagenes" type="file" (change)="onFileChange($event)" multiple class="form-control">
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="!previewAccepted">Registrar inmueble</button>
+  </form>
+
+  <!-- Lista de inmuebles -->
+  <div *ngFor="let inmueble of inmuebles" class="card my-3">
+    <div class="card-body">
+      <h5 class="card-title">{{ inmueble.titulo }}</h5>
+      <p class="card-text">{{ inmueble.direccion }}</p>
+      <button (click)="seleccionarInmueble(inmueble)" class="btn btn-secondary">Ver detalle</button>
     </div>
   </div>
+</div>
 
-  <div class="form-group">
-    <label for="precioPorDia">Precio por día:</label>
-    <div class="input-group">
-      <div class="input-group-prepend">
-        <span class="input-group-text">$</span>
-      </div>
-      <input type="number" class="form-control" formControlName="precioPorDia" placeholder="Ej. 150">
-      <div class="input-group-append">
-        <span class="input-group-text">.00</span>
+<!-- Modal para mostrar detalles del inmueble -->
+<ng-template #detalleModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">{{ inmuebleSeleccionado?.titulo }}</h5>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{ inmuebleSeleccionado?.direccion }}</p>
+    <p>{{ inmuebleSeleccionado?.numHabitaciones }} habitaciones</p>
+    <p>{{ inmuebleSeleccionado?.numBanios }} baños</p>
+    <p>{{ inmuebleSeleccionado?.precioPorDia }} precio por día</p>
+
+    <!-- Imágenes del inmueble -->
+    <div *ngIf="inmuebleSeleccionado?.imagenesRutas?.length">
+      <img [src]="inmuebleSeleccionado?.imagenesRutas?.[currentImageIndex]" alt="Imagen del inmueble" class="img-fluid">
+      <button (click)="previousImage()" class="btn btn-secondary">Anterior</button>
+      <button (click)="nextImage()" class="btn btn-secondary">Siguiente</button>
+    </div>
+  </div>
+</ng-template>
+
+<!-- Modal para vista previa de imágenes -->
+<ng-template #previewModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title">Vista previa de imágenes</h5>
+    <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="image-grid">
+      <div *ngFor="let preview of imagePreviews" class="image-card">
+        <img [src]="preview" class="img-thumbnail" alt="Vista previa de imagen">
       </div>
     </div>
   </div>
-
-  <div class="form-group">
-    <label for="imagen">Imagen:</label>
-    <input type="file" class="form-control-file" formControlName="imagen">
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="acceptPreviews()">Aceptar</button>
   </div>
+</ng-template>
 
-  <button type="submit" class="btn btn-primary btn-block">Registrar Inmueble</button>
-</form>
+
+
+
+
+
+
 

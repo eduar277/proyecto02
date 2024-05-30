@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { InmueblesService } from '../../servicios/inmuebles.service';
 import { Inmueble } from '../../vo/inmueble';
-import { MatDialog } from '@angular/material/dialog';
-import { ImagePreviewDialogComponent } from '../image-preview-dialog/image-preview-dialog.component';
 
 @Component({
   selector: 'app-inmuebles',
@@ -10,79 +10,109 @@ import { ImagePreviewDialogComponent } from '../image-preview-dialog/image-previ
   styleUrls: ['./inmuebles.component.css']
 })
 export class InmueblesComponent implements OnInit {
-  inmuebles: Inmueble[] = [];
-  newInmueble: Inmueble = new Inmueble();
-  imagenes: File[] = [];
-  imagePreviews: string[] = [];
-  currentPreviewIndex = 0;
-  currentImageIndex = 0;
+  @ViewChild('previewModal') previewModal!: TemplateRef<any>;
+  @ViewChild('detalleModal') detalleModal!: TemplateRef<any>;
 
-  constructor(private inmueblesService: InmueblesService, private dialog: MatDialog) { }
+  inmuebleForm: FormGroup;
+  inmuebles: Inmueble[] = [];
+  inmuebleSeleccionado: Inmueble | undefined;
+  currentImageIndex: number = 0;
+  imagePreviews: string[] = [];
+  previewAccepted: boolean = false;
+
+  constructor(private fb: FormBuilder, private inmueblesService: InmueblesService, private modalService: NgbModal) {
+    this.inmuebleForm = this.fb.group({
+      titulo: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      direccion: ['', Validators.required],
+      numHabitaciones: ['', Validators.required],
+      numBanios: ['', Validators.required],
+      precioPorDia: ['', Validators.required]
+    });
+  }
 
   ngOnInit(): void {
     this.getInmuebles();
   }
 
   getInmuebles(): void {
-    this.inmueblesService.getInmuebles().subscribe(inmuebles => this.inmuebles = inmuebles);
+    this.inmueblesService.getInmuebles().subscribe((inmuebles: Inmueble[]) => this.inmuebles = inmuebles);
   }
 
-  addInmueble(): void {
-    if (this.imagenes.length < 4) {
-      alert('Por favor, selecciona al menos 4 imágenes.');
-      return;
+  onSubmit(): void {
+    if (this.inmuebleForm.valid && this.previewAccepted) {
+      const inmueble = this.inmuebleForm.value;
+      this.inmueblesService.createInmueble(inmueble, this.imagePreviews).subscribe(() => {
+        this.getInmuebles();
+        this.inmuebleForm.reset();
+        this.imagePreviews = [];
+        this.previewAccepted = false;
+      });
     }
-    this.inmueblesService.createInmueble(this.newInmueble, this.imagenes).subscribe(inmueble => {
-      this.inmuebles.push(inmueble);
-      alert('Inmueble registrado exitosamente');
-    }, error => {
-      console.error('Error al registrar el inmueble:', error);
-      alert('Ocurrió un error al registrar el inmueble. Por favor, inténtalo de nuevo.');
-    });
   }
 
   onFileChange(event: any): void {
-    for (let i = 0; i < event.target.files.length; i++) {
-      this.imagenes.push(event.target.files[i]);
-
-      // Crear una vista previa de la imagen
+    const files = event.target.files;
+    this.imagePreviews = [];
+    for (let i = 0; i < files.length; i++) {
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imagePreviews.push(e.target.result);
-      };
-      reader.readAsDataURL(event.target.files[i]);
+      reader.onload = (e: any) => this.imagePreviews.push(e.target.result);
+      reader.readAsDataURL(files[i]);
     }
-
-    // Abrir el diálogo de vista previa
-    this.dialog.open(ImagePreviewDialogComponent, {
-      data: this.imagePreviews
-    });
+    this.openModal(this.previewModal);
   }
 
-  verDetalle(inmueble: Inmueble): void {
-    inmueble.expanded = !inmueble.expanded;
+  seleccionarInmueble(inmueble: Inmueble): void {
+    this.inmuebleSeleccionado = inmueble;
+    this.currentImageIndex = 0;
+    this.openModal(this.detalleModal);
   }
 
-  nextImage(inmueble: Inmueble): void {
-    if (inmueble.imagenesRutas && inmueble.imagenesRutas.length > 0) {
-      this.currentImageIndex = (this.currentImageIndex + 1) % inmueble.imagenesRutas.length;
+  previousImage(): void {
+    if (this.inmuebleSeleccionado && this.currentImageIndex > 0) {
+      this.currentImageIndex--;
     }
   }
 
-  previousImage(inmueble: Inmueble): void {
-    if (inmueble.imagenesRutas && inmueble.imagenesRutas.length > 0) {
-      this.currentImageIndex = (this.currentImageIndex - 1 + inmueble.imagenesRutas.length) % inmueble.imagenesRutas.length;
+  nextImage(): void {
+    if (this.inmuebleSeleccionado?.imagenesRutas && this.currentImageIndex < (this.inmuebleSeleccionado.imagenesRutas.length - 1)) {
+      this.currentImageIndex++;
     }
   }
 
-  nextPreviewImage(): void {
-    this.currentPreviewIndex = (this.currentPreviewIndex + 1) % this.imagePreviews.length;
+  acceptPreviews(): void {
+    this.previewAccepted = true;
+    this.closeModal();
   }
 
-  previousPreviewImage(): void {
-    this.currentPreviewIndex = (this.currentPreviewIndex - 1 + this.imagePreviews.length) % this.imagePreviews.length;
+  openModal(template: TemplateRef<any>): void {
+    this.modalService.open(template, { ariaLabelledBy: 'modal-basic-title' }).result.then(
+      (result) => {
+        console.log(`Closed with: ${result}`);
+      },
+      (reason) => {
+        console.log(`Dismissed ${this.getDismissReason(reason)}`);
+      }
+    );
+  }
+
+  closeModal(): void {
+    this.modalService.dismissAll();
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === 'ESC') {
+      return 'by pressing ESC';
+    } else if (reason === 'BACKDROP_CLICK') {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }
+
+
+
 
 
 
