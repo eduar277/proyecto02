@@ -32,7 +32,6 @@
               "node_modules/popper.js/dist/umd/popper.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
-
           },
           "configurations": {
             "production": {
@@ -69,12 +68,15 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "soapProybaseCliente:build"
+          },
           "configurations": {
             "production": {
-              "buildTarget": "soapProybaseCliente:build:production"
+              "browserTarget": "soapProybaseCliente:build:production"
             },
             "development": {
-              "buildTarget": "soapProybaseCliente:build:development"
+              "browserTarget": "soapProybaseCliente:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -82,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "soapProybaseCliente:build"
+            "browserTarget": "soapProybaseCliente:build"
           }
         },
         "test": {
@@ -107,5 +109,6 @@
   },
   "cli": {
     "analytics": "caa33164-ad60-4a1c-a2e9-592c17647395"
-  }
+  },
+  "defaultProject": "soapProybaseCliente"
 }
